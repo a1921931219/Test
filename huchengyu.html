@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全屏爱心动画</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    canvas {
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="heartCanvas"></canvas>
+
+  <script>
+    var canvas = document.getElementById('heartCanvas');
+    var ctx = canvas.getContext('2d');
+
+    // 获取窗口大小
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+
+    // 设置Canvas的大小为窗口大小
+    canvas.width = windowWidth;
+    canvas.height = windowHeight;
+
+    // 初始心形的位置
+    var x = windowWidth / 2;
+    var y = windowHeight / 2;
+
+    // 初始心形的大小
+    var scale = 40;
+
+    // 动画帧
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // 清空画布
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 绘制心形
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x + scale, y - scale, x + 2 * scale, y + 2 * scale, x, y + 3 * scale);
+      ctx.bezierCurveTo(x - 2 * scale, y + 2 * scale, x - scale, y - scale, x, y);
+      ctx.fillStyle = '#ff66b2'; // 粉色
+      ctx.fill();
+      ctx.closePath();
+
+      // 关闭效果，绘制文字
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.shadowBlur = 0;
+
+      // 添加文字，调整文字大小
+      ctx.font = scale / 2 + 'px Arial';
+      ctx.fillStyle = '#ffd700'; // 金色
+      ctx.textAlign = 'center';
+      ctx.fillText('胡诚羽', x, y + 1.5 * scale);
+
+      // 调整心形的位置和大小，增加 scale 的增量
+      x += 0.2; // 调整 x 以让心形水平移动
+      y += Math.sin(x / 20); // 添加垂直方向的动态效果
+      scale += 0.1; // 调整大小的增量，增加心形变大的速度
+
+      // 重置心形位置和大小
+      if (x > windowWidth + scale * 10) {
+        x = -scale * 10;
+        y = windowHeight / 2;
+        scale = 20;
+      }
+    }
+
+    // 开始动画
+    animate();
+  </script>
+</body>
+</html>
